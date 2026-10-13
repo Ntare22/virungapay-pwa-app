@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { registerTourist } from "../lib/api";
 
 export function SignupScreen() {
@@ -11,6 +11,11 @@ export function SignupScreen() {
   const [notice, setNotice] = useState("");
   const [createdEmail, setCreatedEmail] = useState("");
   const [pending, setPending] = useState(false);
+
+  useEffect(() => {
+    const value = new URLSearchParams(window.location.search).get("email");
+    if (value) setEmail(value);
+  }, []);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

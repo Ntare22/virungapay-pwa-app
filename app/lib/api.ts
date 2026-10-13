@@ -12,7 +12,9 @@ export type PublicUser = {
 
 export type Session = { token: string; user: PublicUser };
 
-export type Wallet = { id: string; name?: string; currency: string; balance: string; is_default: boolean };
+export type Wallet = { id: string; name?: string; username?: string; currency: string; balance: string; is_default: boolean };
+
+export type WalletLookup = { username: string; name: string; currency: string; kind: string };
 
 export type Company = {
   id: string;
@@ -124,12 +126,31 @@ export function myCompany() {
   return request<Company>("/v1/companies/mine", {}, token());
 }
 
+export function lookupWallet(username: string) {
+  return request<WalletLookup>(`/v1/wallets/lookup?username=${encodeURIComponent(username)}`, {}, token());
+}
+
 export function myWallets() {
   return request<{ wallets: Wallet[] }>("/v1/wallets/mine", {}, token());
 }
 
 export function payments() {
   return request<{ payments: Payment[] }>("/v1/transactions", {}, token());
+}
+
+export type Trip = {
+  id: string;
+  title: string;
+  business_name?: string;
+  starts_on: string;
+  ends_on: string;
+  currency: string;
+  amount_due: string;
+  status: string;
+};
+
+export function myItineraries() {
+  return request<{ itineraries: Trip[] }>("/v1/itineraries/mine", {}, token());
 }
 
 export async function downloadStatement() {
@@ -189,8 +210,24 @@ export function moveWallets(input: { fromWalletId: string; toWalletId: string; a
   );
 }
 
+export function topUpCard(input: { amount: string; last4: string }) {
+  return request<{ status: string }>("/v1/wallets/topup", { method: "POST", body: JSON.stringify(input) }, token());
+}
+
+export function sendMobileMoney(input: { network: "airtel" | "mtn"; phone: string; amount: string }) {
+  return request<{ status: string }>("/v1/mobile-money", { method: "POST", body: JSON.stringify(input) }, token());
+}
+
+export function sendTip(input: { username: string; amount: string; purpose: "tip" | "service" }) {
+  return request<{ status: string }>("/v1/tips", { method: "POST", body: JSON.stringify(input) }, token());
+}
+
 export function requestEurWallet() {
   return request<Company>("/v1/wallets", { method: "POST", body: JSON.stringify({ currency: "EUR" }) }, token());
+}
+
+export function renameWallet(id: string, input: { name: string; username: string }) {
+  return request<Wallet>(`/v1/wallets/${id}`, { method: "PATCH", body: JSON.stringify(input) }, token());
 }
 
 export function roleLabel(role: string) {

@@ -5,6 +5,7 @@ import type { Payment } from "../lib/api";
 export type TransactionRow = {
   id: string;
   kind: string;
+  invoice?: string;
   when: string;
   what: string;
   between: string;
@@ -75,6 +76,7 @@ function movementRows(payments: Payment[]) {
     rows.push({
       id: payment.id,
       kind: payment.kind,
+      invoice: payment.invoice_number,
       when: when(payment.created_at),
       what: label(payment.kind, payment.direction),
       between: inbound

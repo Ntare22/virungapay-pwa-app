@@ -3,9 +3,11 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { MovementList } from "./movement";
 import { TouristWallet } from "./tourist-wallet";
+import { WalletIdentity } from "./wallet-edit";
 import {
   moveWallets,
   myCompany,
+  myItineraries,
   myWallets,
   payments,
   readSession,
@@ -14,6 +16,7 @@ import {
   tariffs,
   type Payment,
   type Tariff,
+  type Trip,
   type Wallet,
 } from "../lib/api";
 
@@ -27,6 +30,8 @@ export function WalletsScreen() {
   const [moves, setMoves] = useState<Payment[]>([]);
   const [notice, setNotice] = useState("");
   const [move, setMove] = useState<{ fromId: string; toId: string } | null>(null);
+  const [trips, setTrips] = useState<Trip[]>([]);
+  const [tripNotice, setTripNotice] = useState("");
 
   function reload(asRole: string) {
     const load = asRole === "operator_owner" ? myCompany().then((company) => {
@@ -39,6 +44,13 @@ export function WalletsScreen() {
     ];
     if (asRole !== "operator_owner") {
       jobs.push(payments().then((body) => setMoves(body.payments ?? [])).catch(() => setMoves([])));
+    }
+    if (asRole === "tourist") {
+      jobs.push(
+        myItineraries()
+          .then((body) => setTrips(body.itineraries ?? []))
+          .catch((error: unknown) => setTripNotice(error instanceof Error ? error.message : "Something went wrong. Try again.")),
+      );
     }
     return Promise.all(jobs).catch((error: unknown) => setNotice(error instanceof Error ? error.message : "Something went wrong. Try again."));
   }
@@ -56,8 +68,27 @@ export function WalletsScreen() {
   if (role === "tourist") {
     return (
       <div>
-        <h1 className="text-2xl font-bold text-[#1B2129]">Wallet</h1>
-        <TouristWallet wallets={wallets} payments={moves} notice={notice} />
+        <h1 className="text-2xl font-bold text-[#1B2129]">Home</h1>
+        <TouristWallet
+          wallets={wallets}
+          payments={moves}
+          notice={notice}
+          onRenamed={(next) => setWallets((current) => current.map((item) => (item.id === next.id ? { ...item, name: next.name, username: next.username } : item)))}
+        />
+        <section className="mt-6">
+          <h2 className="text-lg font-bold text-[#1B2129]">Itinerary</h2>
+          {tripNotice ? <p className="mt-3 text-sm">{tripNotice}</p> : null}
+          {!tripNotice && trips.length === 0 ? <p className="mt-3 border-2 border-[#1B2129] bg-white p-4 text-sm">No itinerary yet.</p> : null}
+          {trips.map((trip) => (
+            <article key={trip.id} className="mt-3 border-2 border-[#1B2129] bg-white p-4 shadow-[4px_4px_0_#4BFF2A]">
+              <p className="text-base font-bold">{trip.title}</p>
+              {trip.business_name ? <p className="mt-1 text-sm">{trip.business_name}</p> : null}
+              <p className="mt-1 text-sm">{trip.starts_on} to {trip.ends_on}</p>
+              <p className="mt-2 font-mono text-sm">{trip.currency} {trip.amount_due}</p>
+              <p className="mt-2 text-xs font-bold uppercase">{trip.status}</p>
+            </article>
+          ))}
+        </section>
       </div>
     );
   }
@@ -80,7 +111,12 @@ export function WalletsScreen() {
         {slots.map((slot, index) =>
           slot.kind === "wallet" ? (
             <article key={slot.wallet.id} className="border-2 border-[#1B2129] bg-white p-4 shadow-[4px_4px_0_#2A2AFF]">
-              <p className="text-xs font-bold uppercase">{slot.wallet.currency}</p>
+              <WalletIdentity
+                wallet={slot.wallet}
+                fallback={`${slot.wallet.currency} wallet`}
+                onSaved={(next) => setWallets((current) => current.map((item) => (item.id === next.id ? { ...item, name: next.name, username: next.username } : item)))}
+              />
+              <p className="mt-2 text-xs font-bold uppercase">{slot.wallet.currency}</p>
               <p className="mt-1 font-mono text-2xl">{slot.wallet.balance}</p>
             </article>
           ) : (

@@ -15,13 +15,15 @@ const tabs = [
 
 const operatorLinks = [
   { href: "/wallets", label: "Wallets" },
-  { href: "/transactions", label: "Transactions" },
-  { href: "/transact", label: "Transact" },
+  { href: "/transactions", label: "Activity" },
+  { href: "/transact", label: "Pay" },
   { href: "/profile", label: "Profile" },
 ];
 
 const touristLinks = [
-  { href: "/wallets", label: "Wallet" },
+  { href: "/wallets", label: "Home" },
+  { href: "/transactions", label: "Activity" },
+  { href: "/transact", label: "Pay" },
   { href: "/profile", label: "Profile" },
 ];
 

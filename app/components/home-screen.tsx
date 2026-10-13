@@ -65,7 +65,9 @@ export function HomeScreen() {
         ) : (
           wallets.map((wallet) => (
             <article key={wallet.id} className="border-2 border-[#1B2129] bg-white p-4 shadow-[4px_4px_0_#2A2AFF]">
-              <p className="text-xs font-bold uppercase">{wallet.currency}</p>
+              <p className="text-sm font-bold">{wallet.name?.trim() || `${wallet.currency} wallet`}</p>
+              <p className="mt-1 text-xs font-bold uppercase">{wallet.currency}</p>
+              {wallet.username ? <p className="mt-1 font-mono text-sm text-[#2A2AFF]">@{wallet.username}</p> : null}
               <p className="mt-1 font-mono text-2xl">{wallet.balance}</p>
             </article>
           ))
