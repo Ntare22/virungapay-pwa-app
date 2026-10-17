@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import { Mark } from "./mark";
 
 const website = process.env.NEXT_PUBLIC_WEB_URL ?? "http://localhost:3000";
 
@@ -14,16 +15,16 @@ export function DeviceGate({ children }: { children: ReactNode }) {
   if (phone === null) return children;
   if (!phone) {
     return (
-      <main className="grid min-h-dvh place-items-center bg-[#F8F8FF] px-4">
-        <section className="w-full max-w-md border-2 border-[#1B2129] bg-white p-6 shadow-[6px_6px_0_#4BFF2A]">
-          <p className="font-mono text-sm font-bold text-[#2A2AFF]">VP</p>
-          <h1 className="mt-4 text-2xl font-bold text-[#1B2129]">This app is for a phone</h1>
-          <p className="mt-3 text-sm text-[#28313D]">
+      <main className="grid min-h-dvh place-items-center bg-[#F6F1E7] px-4">
+        <section className="w-full max-w-md border-2 border-[#1C2416] bg-white p-6 shadow-[6px_6px_0_#E2B15A]">
+          <Mark className="h-12 w-14" />
+          <h1 className="mt-4 text-2xl font-bold text-[#1C2416]">This app is for a phone</h1>
+          <p className="mt-3 text-sm text-[#1C2416]">
             On a computer, open the VirungaPay website for tour operators, itineraries, and staff.
           </p>
           <a
             href={website}
-            className="mt-6 flex h-12 items-center justify-center border-2 border-[#1B2129] bg-[#4BFF2A] text-sm font-bold uppercase tracking-wide text-[#1B2129]"
+            className="mt-6 flex h-12 items-center justify-center border-2 border-[#1C2416] bg-[#E2B15A] text-sm font-bold uppercase tracking-wide text-[#1C2416]"
           >
             Open the website
           </a>

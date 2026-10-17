@@ -22,18 +22,18 @@ export function MovementList({ payments, title = "Movement", standalone = false 
   return (
     <section className={standalone ? "" : "mt-6"}>
       {standalone ? (
-        <h1 className="text-2xl font-bold text-[#1B2129]">{title}</h1>
+        <h1 className="text-2xl font-bold text-[#1C2416]">{title}</h1>
       ) : (
-        <h2 className="text-sm font-bold uppercase tracking-wide text-[#1B2129]">{title}</h2>
+        <h2 className="text-sm font-bold uppercase tracking-wide text-[#1C2416]">{title}</h2>
       )}
       {rows.length === 0 ? (
-        <p className="mt-3 border-2 border-[#1B2129] bg-white p-4 text-sm">No transactions yet.</p>
+        <p className="mt-3 border-2 border-[#1C2416] bg-white p-4 text-sm">No transactions yet.</p>
       ) : (
         <ul className="mt-3 flex flex-col gap-3">
           {rows.map((row) => (
-            <li key={row.id} className="border-2 border-[#1B2129] bg-white p-3 shadow-[4px_4px_0_#4BFF2A]">
-              <p className="text-xs uppercase text-[#28313D]">{row.when}</p>
-              <p className="mt-1 font-bold text-[#1B2129]">{row.what}</p>
+            <li key={row.id} className="border-2 border-[#1C2416] bg-white p-3 shadow-[4px_4px_0_#E2B15A]">
+              <p className="text-xs uppercase text-[#1C2416]">{row.when}</p>
+              <p className="mt-1 font-bold text-[#1C2416]">{row.what}</p>
               <p className="text-sm">{row.between}</p>
               <p className="mt-1 font-mono text-sm">{row.amount}</p>
             </li>

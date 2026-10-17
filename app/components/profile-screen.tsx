@@ -14,8 +14,8 @@ export function ProfileScreen() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-[#1B2129]">Profile</h1>
-      <dl className="mt-4 border-2 border-[#1B2129] bg-white p-4 shadow-[4px_4px_0_#4BFF2A]">
+      <h1 className="text-2xl font-bold text-[#1C2416]">Profile</h1>
+      <dl className="mt-4 border-2 border-[#1C2416] bg-white p-4 shadow-[4px_4px_0_#E2B15A]">
         <dt className="text-xs font-bold uppercase">Name</dt>
         <dd className="mb-3">{session?.user.name}</dd>
         <dt className="text-xs font-bold uppercase">Email</dt>
@@ -25,7 +25,7 @@ export function ProfileScreen() {
       </dl>
       <button
         type="button"
-        className="mt-4 h-12 w-full border-2 border-[#1B2129] bg-white text-sm font-bold uppercase"
+        className="mt-4 h-12 w-full border-2 border-[#1C2416] bg-white text-sm font-bold uppercase"
         onClick={() => {
           clearSession();
           router.replace("/");

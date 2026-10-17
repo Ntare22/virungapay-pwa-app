@@ -41,16 +41,16 @@ export function TouristTransact() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-[#1B2129]">Pay</h1>
+      <h1 className="text-2xl font-bold text-[#1C2416]">Pay</h1>
       <div className="mt-4 flex flex-col gap-3">
         {actions.map((item) => (
           <button
             key={item.id}
             type="button"
             onClick={() => setAction(item.id)}
-            className="border-2 border-[#1B2129] bg-white p-4 text-left shadow-[4px_4px_0_#2A2AFF]"
+            className="border-2 border-[#1C2416] bg-white p-4 text-left shadow-[4px_4px_0_#1F4D3A]"
           >
-            <p className="font-bold text-[#1B2129]">{item.title}</p>
+            <p className="font-bold text-[#1C2416]">{item.title}</p>
             <p className="mt-1 text-sm">{item.text}</p>
           </button>
         ))}
@@ -94,7 +94,7 @@ function AddMoney() {
 
   return (
     <form onSubmit={onSubmit}>
-      <h1 className="text-2xl font-bold text-[#1B2129]">Add money</h1>
+      <h1 className="text-2xl font-bold text-[#1C2416]">Add money</h1>
       <p className="mt-2 text-sm">The card payment is simulated. Only the last four digits leave this phone.</p>
       <Field label="Name on card" value={name} onChange={setName} autoComplete="cc-name" />
       <Field label="Card number" value={number} onChange={setNumber} inputMode="numeric" autoComplete="cc-number" />
@@ -104,8 +104,8 @@ function AddMoney() {
       </div>
       <Field label="Amount in UGX" value={amount} onChange={setAmount} inputMode="decimal" />
       {notice ? <p className="mt-3 text-sm">{notice}</p> : null}
-      {done ? <p className="mt-3 border-2 border-[#1B2129] bg-white p-3 text-sm shadow-[4px_4px_0_#4BFF2A]">{done}</p> : null}
-      <button type="submit" disabled={pending} className="mt-4 h-12 w-full border-2 border-[#1B2129] bg-[#4BFF2A] text-sm font-bold uppercase disabled:opacity-60">
+      {done ? <p className="mt-3 border-2 border-[#1C2416] bg-white p-3 text-sm shadow-[4px_4px_0_#E2B15A]">{done}</p> : null}
+      <button type="submit" disabled={pending} className="mt-4 h-12 w-full border-2 border-[#1C2416] bg-[#E2B15A] text-sm font-bold uppercase disabled:opacity-60">
         {pending ? "Adding" : "Add money"}
       </button>
     </form>
@@ -142,19 +142,19 @@ function MobileMoney() {
 
   return (
     <form onSubmit={onSubmit}>
-      <h1 className="text-2xl font-bold text-[#1B2129]">Mobile money</h1>
+      <h1 className="text-2xl font-bold text-[#1C2416]">Mobile money</h1>
       <p className="mt-2 text-sm">Airtel and MTN numbers in Uganda.</p>
       <label className="mt-4 block text-sm font-bold">
         Network
-        <select value={network} onChange={(event) => setNetwork(event.target.value as "mtn" | "airtel")} className="mt-1 h-12 w-full border-2 border-[#1B2129] bg-white px-3 font-normal">
+        <select value={network} onChange={(event) => setNetwork(event.target.value as "mtn" | "airtel")} className="mt-1 h-12 w-full border-2 border-[#1C2416] bg-white px-3 font-normal">
           <option value="mtn">MTN</option>
           <option value="airtel">Airtel</option>
         </select>
       </label>
       <label className="mt-3 block text-sm font-bold">
         Mobile number
-        <span className="mt-1 flex h-12 border-2 border-[#1B2129] bg-white">
-          <span className="grid place-items-center border-r-2 border-[#1B2129] px-3 font-mono">+256</span>
+        <span className="mt-1 flex h-12 border-2 border-[#1C2416] bg-white">
+          <span className="grid place-items-center border-r-2 border-[#1C2416] px-3 font-mono">+256</span>
           <input
             value={phone}
             onChange={(event) => setPhone(event.target.value)}
@@ -166,8 +166,8 @@ function MobileMoney() {
       </label>
       <Field label="Amount in UGX" value={amount} onChange={setAmount} inputMode="decimal" />
       {notice ? <p className="mt-3 text-sm">{notice}</p> : null}
-      {done ? <p className="mt-3 border-2 border-[#1B2129] bg-white p-3 text-sm shadow-[4px_4px_0_#4BFF2A]">{done}</p> : null}
-      <button type="submit" disabled={pending} className="mt-4 h-12 w-full border-2 border-[#1B2129] bg-[#4BFF2A] text-sm font-bold uppercase disabled:opacity-60">
+      {done ? <p className="mt-3 border-2 border-[#1C2416] bg-white p-3 text-sm shadow-[4px_4px_0_#E2B15A]">{done}</p> : null}
+      <button type="submit" disabled={pending} className="mt-4 h-12 w-full border-2 border-[#1C2416] bg-[#E2B15A] text-sm font-bold uppercase disabled:opacity-60">
         {pending ? "Sending" : "Send"}
       </button>
     </form>
@@ -237,7 +237,7 @@ function TipCrew() {
 
   return (
     <form onSubmit={onSubmit}>
-      <h1 className="text-2xl font-bold text-[#1B2129]">Tip or pay a business</h1>
+      <h1 className="text-2xl font-bold text-[#1C2416]">Tip or pay a business</h1>
       <p className="mt-2 text-sm">Choose a tip for a guide or driver, or a payment to a tour operator. Then check their username.</p>
       <div className="mt-4 grid grid-cols-2 gap-2">
         {([
@@ -254,8 +254,8 @@ function TipCrew() {
               setNotice("");
               setDone("");
             }}
-            className={`border-2 border-[#1B2129] px-3 py-3 text-sm font-bold ${
-              purpose === id ? "bg-[#2A2AFF] text-white" : "bg-white text-[#1B2129]"
+            className={`border-2 border-[#1C2416] px-3 py-3 text-sm font-bold ${
+              purpose === id ? "bg-[#1F4D3A] text-white" : "bg-white text-[#1C2416]"
             }`}
           >
             {label}
@@ -271,23 +271,23 @@ function TipCrew() {
             setFound(null);
           }}
           placeholder={service ? "kigezi-ugx" : "peter-ugx"}
-          className="mt-1 h-12 w-full border-2 border-[#1B2129] bg-white px-3 font-mono font-normal"
+          className="mt-1 h-12 w-full border-2 border-[#1C2416] bg-white px-3 font-mono font-normal"
         />
       </label>
-      <button type="button" onClick={onCheck} disabled={pending} className="mt-3 h-12 w-full border-2 border-[#1B2129] bg-white text-sm font-bold uppercase disabled:opacity-60">
+      <button type="button" onClick={onCheck} disabled={pending} className="mt-3 h-12 w-full border-2 border-[#1C2416] bg-white text-sm font-bold uppercase disabled:opacity-60">
         {pending ? "Checking" : "Check username"}
       </button>
       {found ? (
-        <p className="mt-3 border-2 border-[#1B2129] bg-white p-4 text-sm shadow-[4px_4px_0_#4BFF2A]">
+        <p className="mt-3 border-2 border-[#1C2416] bg-white p-4 text-sm shadow-[4px_4px_0_#E2B15A]">
           <span className="font-bold">{found.name || (service ? "Tour operator" : "Guide or driver")}</span>
-          <span className="mt-1 block font-mono text-[#2A2AFF]">@{found.username}</span>
+          <span className="mt-1 block font-mono text-[#1F4D3A]">@{found.username}</span>
           <span className="mt-1 block">{found.currency} wallet</span>
         </p>
       ) : null}
       <Field label="Amount in UGX" value={amount} onChange={setAmount} inputMode="decimal" />
       {notice ? <p className="mt-3 text-sm">{notice}</p> : null}
-      {done ? <p className="mt-3 border-2 border-[#1B2129] bg-white p-3 text-sm shadow-[4px_4px_0_#4BFF2A]">{done}</p> : null}
-      <button type="submit" disabled={pending || !found} className="mt-4 h-12 w-full border-2 border-[#1B2129] bg-[#4BFF2A] text-sm font-bold uppercase disabled:opacity-60">
+      {done ? <p className="mt-3 border-2 border-[#1C2416] bg-white p-3 text-sm shadow-[4px_4px_0_#E2B15A]">{done}</p> : null}
+      <button type="submit" disabled={pending || !found} className="mt-4 h-12 w-full border-2 border-[#1C2416] bg-[#E2B15A] text-sm font-bold uppercase disabled:opacity-60">
         {pending ? "Sending" : service ? "Pay" : "Send tip"}
       </button>
     </form>
@@ -318,7 +318,7 @@ function Field({
         placeholder={placeholder}
         inputMode={inputMode}
         autoComplete={autoComplete}
-        className="mt-1 h-12 w-full border-2 border-[#1B2129] bg-white px-3 font-normal"
+        className="mt-1 h-12 w-full border-2 border-[#1C2416] bg-white px-3 font-normal"
       />
     </label>
   );
@@ -356,7 +356,7 @@ function luhn(pan: string) {
 
 function Back({ onBack }: { onBack: () => void }) {
   return (
-    <button type="button" onClick={onBack} className="mb-4 inline-flex h-10 items-center gap-2 border-2 border-[#1B2129] bg-white px-3 text-sm font-bold uppercase text-[#1B2129]">
+    <button type="button" onClick={onBack} className="mb-4 inline-flex h-10 items-center gap-2 border-2 border-[#1C2416] bg-white px-3 text-sm font-bold uppercase text-[#1C2416]">
       <span aria-hidden="true">←</span>
       Pay
     </button>

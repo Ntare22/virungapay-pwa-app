@@ -33,18 +33,18 @@ export function HomeScreen() {
     const wallet = wallets[0];
     return (
       <div>
-        <h1 className="text-2xl font-bold text-[#1B2129]">{session?.user.name}</h1>
+        <h1 className="text-2xl font-bold text-[#1C2416]">{session?.user.name}</h1>
         <p className="text-sm uppercase tracking-wide">{roleLabel(role)}</p>
         <p className="mt-4 text-sm">Use the menu for your wallet and profile.</p>
         {notice ? <p className="mt-3 text-sm">{notice}</p> : null}
         {notice ? null : wallet ? (
-          <Link href="/wallets" className="mt-4 block border-2 border-[#1B2129] bg-white p-4 shadow-[4px_4px_0_#2A2AFF]">
+          <Link href="/wallets" className="mt-4 block border-2 border-[#1C2416] bg-white p-4 shadow-[4px_4px_0_#1F4D3A]">
             <p className="text-xs font-bold uppercase">{wallet.name || "VirungaPass Wallet"}</p>
             <p className="mt-1 text-sm">{wallet.currency}</p>
             <p className="mt-1 font-mono text-2xl">{wallet.balance}</p>
           </Link>
         ) : (
-          <p className="mt-4 border-2 border-[#1B2129] bg-white p-4 text-sm">Your VirungaPass Wallet is not ready yet.</p>
+          <p className="mt-4 border-2 border-[#1C2416] bg-white p-4 text-sm">Your VirungaPass Wallet is not ready yet.</p>
         )}
       </div>
     );
@@ -54,20 +54,20 @@ export function HomeScreen() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-[#1B2129]">{session?.user.name}</h1>
+      <h1 className="text-2xl font-bold text-[#1C2416]">{session?.user.name}</h1>
       <p className="text-sm uppercase tracking-wide">{roleLabel(role)}</p>
       {notice ? <p className="mt-3 text-sm">{notice}</p> : null}
       <div className="mt-4 flex flex-col gap-3">
         {notice ? null : wallets.length === 0 ? (
-          <p className="border-2 border-[#1B2129] bg-white p-4 text-sm">
+          <p className="border-2 border-[#1C2416] bg-white p-4 text-sm">
             {role === "operator_owner" ? "No wallet on this business yet." : "No wallet yet. A tip opens one."}
           </p>
         ) : (
           wallets.map((wallet) => (
-            <article key={wallet.id} className="border-2 border-[#1B2129] bg-white p-4 shadow-[4px_4px_0_#2A2AFF]">
+            <article key={wallet.id} className="border-2 border-[#1C2416] bg-white p-4 shadow-[4px_4px_0_#1F4D3A]">
               <p className="text-sm font-bold">{wallet.name?.trim() || `${wallet.currency} wallet`}</p>
               <p className="mt-1 text-xs font-bold uppercase">{wallet.currency}</p>
-              {wallet.username ? <p className="mt-1 font-mono text-sm text-[#2A2AFF]">@{wallet.username}</p> : null}
+              {wallet.username ? <p className="mt-1 font-mono text-sm text-[#1F4D3A]">@{wallet.username}</p> : null}
               <p className="mt-1 font-mono text-2xl">{wallet.balance}</p>
             </article>
           ))

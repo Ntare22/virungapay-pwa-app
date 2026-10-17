@@ -44,24 +44,24 @@ function OperatorTransact() {
     return (
       <div>
         <Back onBack={() => setAction(null)} />
-        <h1 className="text-2xl font-bold text-[#1B2129]">{chosen.title}</h1>
-        <p className="mt-4 border-2 border-[#1B2129] bg-white p-4 text-sm">{chosen.text}</p>
+        <h1 className="text-2xl font-bold text-[#1C2416]">{chosen.title}</h1>
+        <p className="mt-4 border-2 border-[#1C2416] bg-white p-4 text-sm">{chosen.text}</p>
       </div>
     );
   }
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-[#1B2129]">Pay</h1>
+      <h1 className="text-2xl font-bold text-[#1C2416]">Pay</h1>
       <div className="mt-4 flex flex-col gap-3">
         {actions.map((item) => (
           <button
             key={item.id}
             type="button"
             onClick={() => setAction(item.id)}
-            className="border-2 border-[#1B2129] bg-white p-4 text-left shadow-[4px_4px_0_#2A2AFF]"
+            className="border-2 border-[#1C2416] bg-white p-4 text-left shadow-[4px_4px_0_#1F4D3A]"
           >
-            <p className="font-bold text-[#1B2129]">{item.title}</p>
+            <p className="font-bold text-[#1C2416]">{item.title}</p>
             <p className="mt-1 text-sm">{item.text}</p>
           </button>
         ))}
@@ -94,7 +94,7 @@ function SendToWallet() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-[#1B2129]">VirungaPay wallet</h1>
+      <h1 className="text-2xl font-bold text-[#1C2416]">VirungaPay wallet</h1>
       <p className="mt-2 text-sm">Enter the wallet username and check it before you send.</p>
       <label className="mt-4 block text-sm font-bold">
         Username
@@ -105,16 +105,16 @@ function SendToWallet() {
             setFound(null);
           }}
           placeholder="james-ugx"
-          className="mt-1 h-12 w-full border-2 border-[#1B2129] px-3 font-mono font-normal"
+          className="mt-1 h-12 w-full border-2 border-[#1C2416] px-3 font-mono font-normal"
         />
       </label>
-      <button type="button" onClick={onCheck} disabled={pending} className="mt-3 h-12 w-full border-2 border-[#1B2129] bg-white text-sm font-bold uppercase disabled:opacity-60">
+      <button type="button" onClick={onCheck} disabled={pending} className="mt-3 h-12 w-full border-2 border-[#1C2416] bg-white text-sm font-bold uppercase disabled:opacity-60">
         {pending ? "Checking" : "Check username"}
       </button>
       {found ? (
-        <p className="mt-3 border-2 border-[#1B2129] bg-white p-4 text-sm shadow-[4px_4px_0_#4BFF2A]">
+        <p className="mt-3 border-2 border-[#1C2416] bg-white p-4 text-sm shadow-[4px_4px_0_#E2B15A]">
           <span className="font-bold">{found.name || "Wallet"}</span>
-          <span className="mt-1 block font-mono text-[#2A2AFF]">@{found.username}</span>
+          <span className="mt-1 block font-mono text-[#1F4D3A]">@{found.username}</span>
           <span className="mt-1 block">{found.currency} wallet</span>
         </p>
       ) : null}
@@ -125,7 +125,7 @@ function SendToWallet() {
 
 function Back({ onBack }: { onBack: () => void }) {
   return (
-    <button type="button" onClick={onBack} className="mb-4 inline-flex h-10 items-center gap-2 border-2 border-[#1B2129] bg-white px-3 text-sm font-bold uppercase text-[#1B2129]">
+    <button type="button" onClick={onBack} className="mb-4 inline-flex h-10 items-center gap-2 border-2 border-[#1C2416] bg-white px-3 text-sm font-bold uppercase text-[#1C2416]">
       <span aria-hidden="true">←</span>
       Pay
     </button>

@@ -20,24 +20,24 @@ export function TouristWallet({
 
   if (notice) return <p className="mt-3 text-sm">{notice}</p>;
   if (wallets.length === 0) {
-    return <p className="mt-4 border-2 border-[#1B2129] bg-white p-4 text-sm">Your VirungaPass Wallet is not ready yet.</p>;
+    return <p className="mt-4 border-2 border-[#1C2416] bg-white p-4 text-sm">Your VirungaPass Wallet is not ready yet.</p>;
   }
 
   return (
     <div>
       {wallets.map((wallet) => (
-        <article key={wallet.id} className="mt-4 border-2 border-[#1B2129] bg-white p-4 shadow-[4px_4px_0_#2A2AFF]">
+        <article key={wallet.id} className="mt-4 border-2 border-[#1C2416] bg-white p-4 shadow-[4px_4px_0_#1F4D3A]">
           <WalletIdentity wallet={wallet} fallback="VirungaPass Wallet" usernameOnly onSaved={onRenamed} />
           <p className="mt-2 text-sm">{wallet.currency}</p>
           <p className="mt-1 font-mono text-2xl">{wallet.balance}</p>
         </article>
       ))}
       <div className="mt-3 grid grid-cols-2 gap-3">
-        <article className="border-2 border-[#1B2129] bg-white p-3 shadow-[4px_4px_0_#4BFF2A]">
+        <article className="border-2 border-[#1C2416] bg-white p-3 shadow-[4px_4px_0_#E2B15A]">
           <p className="text-xs font-bold uppercase">Money in</p>
           <p className="mt-2 font-mono text-lg">{currency} {moneyIn}</p>
         </article>
-        <article className="border-2 border-[#1B2129] bg-white p-3 shadow-[4px_4px_0_#2A2AFF]">
+        <article className="border-2 border-[#1C2416] bg-white p-3 shadow-[4px_4px_0_#1F4D3A]">
           <p className="text-xs font-bold uppercase">Money out</p>
           <p className="mt-2 font-mono text-lg">{currency} {moneyOut}</p>
         </article>

@@ -24,13 +24,13 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#2A2AFF",
+  themeColor: "#1F4D3A",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${openSans.variable} ${robotoMono.variable} h-full antialiased`}>
-      <body className="min-h-full bg-[#F8F8FF] font-sans text-[#28313D]">
+      <body className="min-h-full bg-[#F6F1E7] font-sans text-[#1C2416]">
         <RegisterServiceWorker />
         <DeviceGate>{children}</DeviceGate>
       </body>

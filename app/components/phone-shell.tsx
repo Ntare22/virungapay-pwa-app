@@ -42,7 +42,7 @@ export function PhoneShell({ children }: { children: ReactNode }) {
   }, [router, pathname]);
 
   if (!session) {
-    return <main className="mx-auto min-h-dvh w-full max-w-md bg-[#F8F8FF]" />;
+    return <main className="mx-auto min-h-dvh w-full max-w-md bg-[#F6F1E7]" />;
   }
 
   const tourist = session.user.role === "tourist";
@@ -50,8 +50,8 @@ export function PhoneShell({ children }: { children: ReactNode }) {
   const links = tourist ? touristLinks : operator ? operatorLinks : tabs;
 
   return (
-    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-[#F8F8FF]">
-      <header className="flex items-center justify-between border-b-2 border-[#1B2129] bg-white px-4 py-3">
+    <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-[#F6F1E7]">
+      <header className="flex items-center justify-between border-b-2 border-[#1C2416] bg-white px-4 py-3">
         <Mark />
         {tourist || operator ? (
           <button
@@ -60,16 +60,16 @@ export function PhoneShell({ children }: { children: ReactNode }) {
               clearSession();
               router.replace("/");
             }}
-            className="border-2 border-[#1B2129] px-3 py-2 text-xs font-bold uppercase tracking-wide"
+            className="border-2 border-[#1C2416] px-3 py-2 text-xs font-bold uppercase tracking-wide"
           >
             Log out
           </button>
         ) : (
-          <p className="text-xs uppercase tracking-wide text-[#28313D]">{roleLabel(session.user.role)}</p>
+          <p className="text-xs uppercase tracking-wide text-[#1C2416]">{roleLabel(session.user.role)}</p>
         )}
       </header>
       <main className="flex-1 px-4 py-4">{children}</main>
-      <nav className="sticky bottom-0 z-30 flex border-t-2 border-[#1B2129] bg-white pb-[env(safe-area-inset-bottom)]">
+      <nav className="sticky bottom-0 z-30 flex border-t-2 border-[#1C2416] bg-white pb-[env(safe-area-inset-bottom)]">
         {links.map((tab) => {
           const active = pathname === tab.href;
           return (
@@ -77,7 +77,7 @@ export function PhoneShell({ children }: { children: ReactNode }) {
               key={tab.href}
               href={tab.href}
               className={`flex h-16 flex-1 items-center justify-center px-1 text-center text-[11px] font-bold uppercase leading-tight tracking-wide ${
-                active ? "bg-[#2A2AFF] text-white" : "text-[#1B2129]"
+                active ? "bg-[#1F4D3A] text-white" : "text-[#1C2416]"
               }`}
             >
               {tab.label}

@@ -153,8 +153,8 @@ export function myItineraries() {
   return request<{ itineraries: Trip[] }>("/v1/itineraries/mine", {}, token());
 }
 
-export async function downloadStatement() {
-  const response = await fetch("/v1/wallets/mine/statement?format=pdf", {
+export async function downloadStatement(walletId: string, filename: string) {
+  const response = await fetch(`/v1/wallets/${walletId}/statement?format=pdf`, {
     headers: { authorization: `Bearer ${token() ?? ""}` },
   });
   if (!response.ok) {
@@ -171,7 +171,7 @@ export async function downloadStatement() {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "VirungaPass-statement.pdf";
+  link.download = filename;
   link.click();
   URL.revokeObjectURL(url);
 }
@@ -220,10 +220,6 @@ export function sendMobileMoney(input: { network: "airtel" | "mtn"; phone: strin
 
 export function sendTip(input: { username: string; amount: string; purpose: "tip" | "service" }) {
   return request<{ status: string }>("/v1/tips", { method: "POST", body: JSON.stringify(input) }, token());
-}
-
-export function requestEurWallet() {
-  return request<Company>("/v1/wallets", { method: "POST", body: JSON.stringify({ currency: "EUR" }) }, token());
 }
 
 export function renameWallet(id: string, input: { name: string; username: string }) {

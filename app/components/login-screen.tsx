@@ -54,41 +54,41 @@ export function LoginScreen() {
   }
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-[#F8F8FF] px-4 py-8">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-[#F6F1E7] px-4 py-8">
       <Mark />
-      <h1 className="mt-6 text-3xl font-bold text-[#1B2129]">VirungaPay</h1>
-      <p className="mt-2 text-sm text-[#28313D]">Sign in with a code sent to your email. Passwords stay on the website.</p>
-      <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-4 border-2 border-[#1B2129] bg-white p-4 shadow-[6px_6px_0_#4BFF2A]">
-        <label className="text-sm font-bold text-[#1B2129]">
+      <h1 className="mt-6 text-3xl font-bold text-[#1C2416]">VirungaPay</h1>
+      <p className="mt-2 text-sm text-[#1C2416]">Sign in with a code sent to your email. Passwords stay on the website.</p>
+      <form onSubmit={onSubmit} className="mt-8 flex flex-col gap-4 border-2 border-[#1C2416] bg-white p-4 shadow-[6px_6px_0_#E2B15A]">
+        <label className="text-sm font-bold text-[#1C2416]">
           Email
           <input
             type="email"
             autoComplete="email"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
-            className="mt-1 h-12 w-full border-2 border-[#1B2129] px-3 font-normal"
+            className="mt-1 h-12 w-full border-2 border-[#1C2416] px-3 font-normal"
           />
         </label>
         {sent ? (
-          <label className="text-sm font-bold text-[#1B2129]">
+          <label className="text-sm font-bold text-[#1C2416]">
             Code
             <input
               inputMode="numeric"
               autoComplete="one-time-code"
               value={code}
               onChange={(event) => setCode(event.target.value.replace(/\D/g, "").slice(0, 6))}
-              className="mt-1 h-12 w-full border-2 border-[#1B2129] px-3 font-mono text-lg tracking-widest font-normal"
+              className="mt-1 h-12 w-full border-2 border-[#1C2416] px-3 font-mono text-lg tracking-widest font-normal"
             />
           </label>
         ) : null}
-        {notice ? <p className="text-sm text-[#1B2129]">{notice}</p> : null}
-        <button type="submit" disabled={pending} className="h-12 border-2 border-[#1B2129] bg-[#4BFF2A] text-sm font-bold uppercase tracking-wide text-[#1B2129] disabled:opacity-60">
+        {notice ? <p className="text-sm text-[#1C2416]">{notice}</p> : null}
+        <button type="submit" disabled={pending} className="h-12 border-2 border-[#1C2416] bg-[#E2B15A] text-sm font-bold uppercase tracking-wide text-[#1C2416] disabled:opacity-60">
           {pending ? "Please wait" : sent ? "Login" : "Email me a code"}
         </button>
         {sent ? (
           <button
             type="button"
-            className="text-sm font-bold text-[#2A2AFF]"
+            className="text-sm font-bold text-[#1F4D3A]"
             onClick={() => {
               setSent(false);
               setCode("");
@@ -98,7 +98,7 @@ export function LoginScreen() {
             Use a different email
           </button>
         ) : null}
-        <Link href="/signup" className="text-center text-sm font-bold text-[#1B2129]">
+        <Link href="/signup" className="text-center text-sm font-bold text-[#1C2416]">
           Sign up as a tourist
         </Link>
       </form>

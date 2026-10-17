@@ -22,12 +22,12 @@ export function WalletIdentity({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-xs font-bold uppercase">{label}</p>
-          <p className="mt-1 break-all font-mono text-sm normal-case text-[#2A2AFF]">@{wallet.username || "no username"}</p>
+          <p className="mt-1 break-all font-mono text-sm normal-case text-[#1F4D3A]">@{wallet.username || "no username"}</p>
         </div>
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="h-9 shrink-0 border-2 border-[#1B2129] bg-white px-3 text-xs font-bold uppercase"
+          className="h-9 shrink-0 border-2 border-[#1C2416] bg-white px-3 text-xs font-bold uppercase"
         >
           Edit
         </button>
@@ -80,14 +80,14 @@ function UsernameModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-[#1B2129]/40 p-4" onMouseDown={() => !pending && onClose()}>
+    <div className="fixed inset-0 z-50 grid place-items-center bg-[#1C2416]/40 p-4" onMouseDown={() => !pending && onClose()}>
       <form
         role="dialog"
         aria-modal="true"
         aria-labelledby="edit-username-title"
         onMouseDown={(event) => event.stopPropagation()}
         onSubmit={onSubmit}
-        className="w-full max-w-md border-2 border-[#1B2129] bg-[#F8F8FF] p-4 shadow-[6px_6px_0_#4BFF2A]"
+        className="w-full max-w-md border-2 border-[#1C2416] bg-[#F6F1E7] p-4 shadow-[6px_6px_0_#E2B15A]"
       >
         <div className="flex items-center justify-between">
           <h2 id="edit-username-title" className="text-lg font-bold">Edit username</h2>
@@ -102,7 +102,7 @@ function UsernameModal({
               value={name}
               onChange={(event) => setName(event.target.value)}
               maxLength={60}
-              className="mt-1 h-12 w-full border-2 border-[#1B2129] bg-white px-3 font-normal"
+              className="mt-1 h-12 w-full border-2 border-[#1C2416] bg-white px-3 font-normal"
             />
           </label>
         )}
@@ -116,11 +116,11 @@ function UsernameModal({
             autoCapitalize="none"
             autoCorrect="off"
             spellCheck={false}
-            className="mt-1 h-12 w-full border-2 border-[#1B2129] bg-white px-3 font-mono font-normal normal-case"
+            className="mt-1 h-12 w-full border-2 border-[#1C2416] bg-white px-3 font-mono font-normal normal-case"
           />
         </label>
         {notice ? <p className="mt-2 text-sm font-normal normal-case">{notice}</p> : null}
-        <button type="submit" disabled={pending} className="mt-4 h-12 w-full border-2 border-[#1B2129] bg-[#4BFF2A] text-sm font-bold uppercase disabled:opacity-60">
+        <button type="submit" disabled={pending} className="mt-4 h-12 w-full border-2 border-[#1C2416] bg-[#E2B15A] text-sm font-bold uppercase disabled:opacity-60">
           {pending ? "Saving" : "Save"}
         </button>
       </form>

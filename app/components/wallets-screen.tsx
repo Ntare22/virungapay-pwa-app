@@ -11,7 +11,6 @@ import {
   myWallets,
   payments,
   readSession,
-  requestEurWallet,
   roleLabel,
   tariffs,
   type Payment,
@@ -24,7 +23,6 @@ export function WalletsScreen() {
   const [role, setRole] = useState("");
   const [name, setName] = useState("");
   const operator = role === "operator_owner";
-  const [companyStatus, setCompanyStatus] = useState("");
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [rates, setRates] = useState<Tariff[]>([]);
   const [moves, setMoves] = useState<Payment[]>([]);
@@ -34,10 +32,7 @@ export function WalletsScreen() {
   const [tripNotice, setTripNotice] = useState("");
 
   function reload(asRole: string) {
-    const load = asRole === "operator_owner" ? myCompany().then((company) => {
-      setCompanyStatus(company.status);
-      return company.wallets ?? [];
-    }) : myWallets().then((body) => body.wallets ?? []);
+    const load = asRole === "operator_owner" ? myCompany().then((company) => company.wallets ?? []) : myWallets().then((body) => body.wallets ?? []);
     const jobs: Promise<unknown>[] = [
       load.then(setWallets),
       tariffs().then((body) => setRates(body.tariffs ?? [])).catch(() => setRates([])),
@@ -68,7 +63,7 @@ export function WalletsScreen() {
   if (role === "tourist") {
     return (
       <div>
-        <h1 className="text-2xl font-bold text-[#1B2129]">Home</h1>
+        <h1 className="text-2xl font-bold text-[#1C2416]">Home</h1>
         <TouristWallet
           wallets={wallets}
           payments={moves}
@@ -76,11 +71,11 @@ export function WalletsScreen() {
           onRenamed={(next) => setWallets((current) => current.map((item) => (item.id === next.id ? { ...item, name: next.name, username: next.username } : item)))}
         />
         <section className="mt-6">
-          <h2 className="text-lg font-bold text-[#1B2129]">Itinerary</h2>
+          <h2 className="text-lg font-bold text-[#1C2416]">Itinerary</h2>
           {tripNotice ? <p className="mt-3 text-sm">{tripNotice}</p> : null}
-          {!tripNotice && trips.length === 0 ? <p className="mt-3 border-2 border-[#1B2129] bg-white p-4 text-sm">No itinerary yet.</p> : null}
+          {!tripNotice && trips.length === 0 ? <p className="mt-3 border-2 border-[#1C2416] bg-white p-4 text-sm">No itinerary yet.</p> : null}
           {trips.map((trip) => (
-            <article key={trip.id} className="mt-3 border-2 border-[#1B2129] bg-white p-4 shadow-[4px_4px_0_#4BFF2A]">
+            <article key={trip.id} className="mt-3 border-2 border-[#1C2416] bg-white p-4 shadow-[4px_4px_0_#E2B15A]">
               <p className="text-base font-bold">{trip.title}</p>
               {trip.business_name ? <p className="mt-1 text-sm">{trip.business_name}</p> : null}
               <p className="mt-1 text-sm">{trip.starts_on} to {trip.ends_on}</p>
@@ -94,23 +89,22 @@ export function WalletsScreen() {
   }
 
   const slots = exchangeSlots(wallets, rates);
-  const canRequestEur = operator && companyStatus === "approved" && !wallets.some((wallet) => wallet.currency === "EUR");
 
   return (
     <div>
       {operator ? (
         <>
-          <h1 className="text-2xl font-bold text-[#1B2129]">{name}</h1>
+          <h1 className="text-2xl font-bold text-[#1C2416]">{name}</h1>
           <p className="text-sm uppercase tracking-wide">{roleLabel(role)}</p>
         </>
       ) : (
-        <h1 className="text-2xl font-bold text-[#1B2129]">Wallets</h1>
+        <h1 className="text-2xl font-bold text-[#1C2416]">Wallets</h1>
       )}
       {notice ? <p className="mt-3 text-sm">{notice}</p> : null}
       <div className="mt-4 flex flex-col gap-2">
         {slots.map((slot, index) =>
           slot.kind === "wallet" ? (
-            <article key={slot.wallet.id} className="border-2 border-[#1B2129] bg-white p-4 shadow-[4px_4px_0_#2A2AFF]">
+            <article key={slot.wallet.id} className="border-2 border-[#1C2416] bg-white p-4 shadow-[4px_4px_0_#1F4D3A]">
               <WalletIdentity
                 wallet={slot.wallet}
                 fallback={`${slot.wallet.currency} wallet`}
@@ -126,7 +120,7 @@ export function WalletsScreen() {
                 type="button"
                 disabled={!operator}
                 onClick={() => operator && setMove({ fromId: slot.fromId, toId: slot.toId })}
-                className="border-2 border-[#1B2129] bg-[#4BFF2A] px-3 py-2 text-center text-xs font-bold uppercase shadow-[3px_3px_0_#1B2129] disabled:bg-white"
+                className="border-2 border-[#1C2416] bg-[#E2B15A] px-3 py-2 text-center text-xs font-bold uppercase shadow-[3px_3px_0_#1C2416] disabled:bg-white"
               >
                 {slot.pair}
                 <span className="mt-1 block font-mono text-sm normal-case">{slot.rate}</span>
@@ -136,23 +130,6 @@ export function WalletsScreen() {
           ),
         )}
       </div>
-      {canRequestEur ? (
-        <button
-          type="button"
-          className="mt-4 h-12 w-full border-2 border-[#1B2129] bg-white text-sm font-bold uppercase"
-          onClick={() => {
-            setNotice("");
-            requestEurWallet()
-              .then((company) => {
-                setWallets(company.wallets ?? []);
-                setCompanyStatus(company.status);
-              })
-              .catch((error: unknown) => setNotice(error instanceof Error ? error.message : "Something went wrong. Try again."));
-          }}
-        >
-          Request EUR wallet
-        </button>
-      ) : null}
       {operator ? null : <MovementList payments={moves} />}
       {move ? (
         <MoveModal
@@ -202,14 +179,14 @@ function MoveModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-[#1B2129]/40 p-4" onMouseDown={() => !pending && onClose()}>
+    <div className="fixed inset-0 z-50 grid place-items-center bg-[#1C2416]/40 p-4" onMouseDown={() => !pending && onClose()}>
       <form
         role="dialog"
         aria-modal="true"
         aria-labelledby="move-title"
         onMouseDown={(event) => event.stopPropagation()}
         onSubmit={onSubmit}
-        className="w-full max-w-md border-2 border-[#1B2129] bg-[#F8F8FF] p-4 shadow-[6px_6px_0_#4BFF2A]"
+        className="w-full max-w-md border-2 border-[#1C2416] bg-[#F6F1E7] p-4 shadow-[6px_6px_0_#E2B15A]"
       >
         <div className="flex items-center justify-between">
           <h2 id="move-title" className="text-lg font-bold">Move money</h2>
@@ -217,7 +194,7 @@ function MoveModal({
         </div>
         <label className="mt-3 block text-sm font-bold">
           From
-          <select value={from} onChange={(event) => setFrom(event.target.value)} className="mt-1 h-12 w-full border-2 border-[#1B2129] bg-white px-2 font-normal">
+          <select value={from} onChange={(event) => setFrom(event.target.value)} className="mt-1 h-12 w-full border-2 border-[#1C2416] bg-white px-2 font-normal">
             {wallets.map((wallet) => (
               <option key={wallet.id} value={wallet.id}>{wallet.currency}</option>
             ))}
@@ -225,7 +202,7 @@ function MoveModal({
         </label>
         <label className="mt-3 block text-sm font-bold">
           To
-          <select value={to} onChange={(event) => setTo(event.target.value)} className="mt-1 h-12 w-full border-2 border-[#1B2129] bg-white px-2 font-normal">
+          <select value={to} onChange={(event) => setTo(event.target.value)} className="mt-1 h-12 w-full border-2 border-[#1C2416] bg-white px-2 font-normal">
             {wallets.map((wallet) => (
               <option key={wallet.id} value={wallet.id}>{wallet.currency}</option>
             ))}
@@ -233,10 +210,10 @@ function MoveModal({
         </label>
         <label className="mt-3 block text-sm font-bold">
           Amount
-          <input value={amount} onChange={(event) => setAmount(event.target.value)} inputMode="decimal" className="mt-1 h-12 w-full border-2 border-[#1B2129] px-3 font-normal" />
+          <input value={amount} onChange={(event) => setAmount(event.target.value)} inputMode="decimal" className="mt-1 h-12 w-full border-2 border-[#1C2416] px-3 font-normal" />
         </label>
         {notice ? <p className="mt-2 text-sm">{notice}</p> : null}
-        <button type="submit" disabled={pending} className="mt-4 h-12 w-full border-2 border-[#1B2129] bg-[#4BFF2A] text-sm font-bold uppercase disabled:opacity-60">
+        <button type="submit" disabled={pending} className="mt-4 h-12 w-full border-2 border-[#1C2416] bg-[#E2B15A] text-sm font-bold uppercase disabled:opacity-60">
           {pending ? "Moving" : "Move"}
         </button>
       </form>
@@ -247,7 +224,7 @@ function MoveModal({
 function Arrow({ direction }: { direction: "left" | "right" }) {
   return (
     <svg width="28" height="16" viewBox="0 0 28 16" aria-hidden="true">
-      <polygon fill="#2A2AFF" points={direction === "right" ? "0,0 28,8 0,16" : "28,0 0,8 28,16"} />
+      <polygon fill="#1F4D3A" points={direction === "right" ? "0,0 28,8 0,16" : "28,0 0,8 28,16"} />
     </svg>
   );
 }
@@ -257,15 +234,12 @@ function exchangeSlots(wallets: Wallet[], rates: Tariff[]) {
   const slots: ({ kind: "wallet"; wallet: Wallet } | { kind: "rate"; pair: string; rate: string; fromId: string; toId: string })[] = [];
   const usd = byCurrency.get("USD");
   const ugx = byCurrency.get("UGX");
-  const eur = byCurrency.get("EUR");
   if (usd && ugx) {
     slots.push({ kind: "wallet", wallet: usd }, rateSlot("USD/UGX", rates, usd.id, ugx.id), { kind: "wallet", wallet: ugx });
   }
-  if (eur && ugx) {
-    if (!slots.some((slot) => slot.kind === "wallet" && slot.wallet.currency === "UGX")) slots.push({ kind: "wallet", wallet: ugx });
-    slots.push(rateSlot("EUR/UGX", rates, eur.id, ugx.id), { kind: "wallet", wallet: eur });
+  if (slots.length === 0) {
+    wallets.filter((wallet) => wallet.currency === "USD" || wallet.currency === "UGX").forEach((wallet) => slots.push({ kind: "wallet", wallet }));
   }
-  if (slots.length === 0) wallets.forEach((wallet) => slots.push({ kind: "wallet", wallet }));
   return slots;
 }
 
