@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Open_Sans, Roboto_Mono } from "next/font/google";
 import { DeviceGate } from "./components/device-gate";
+import { InstallPrompt } from "./components/install-prompt";
 import { RegisterServiceWorker } from "./components/register-sw";
 import "./globals.css";
 
@@ -32,7 +33,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${openSans.variable} ${robotoMono.variable} h-full antialiased`}>
       <body className="min-h-full bg-[#F6F1E7] font-sans text-[#1C2416]">
         <RegisterServiceWorker />
-        <DeviceGate>{children}</DeviceGate>
+        <DeviceGate>
+          <InstallPrompt />
+          {children}
+        </DeviceGate>
       </body>
     </html>
   );
