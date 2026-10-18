@@ -18,6 +18,14 @@ body {
   font-family: var(--font-open-sans), "Open Sans", sans-serif;
 }
 
+@layer base {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
 .font-mono {
   font-family: var(--font-roboto-mono), ui-monospace, monospace;
 }
