@@ -45,7 +45,7 @@ export function PhoneShell({ children }: { children: ReactNode }) {
   if (!session) {
     return (
       <main className="grid min-h-dvh place-items-center bg-[#F6F1E7]">
-        <LogoLoader label="Loading" className="py-0" />
+        <LogoLoader label="Loading" />
       </main>
     );
   }

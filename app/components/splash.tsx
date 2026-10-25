@@ -21,10 +21,8 @@ export function Splash() {
       aria-hidden={phase === "hide"}
       className={`fixed inset-0 z-[80] grid place-items-center bg-[#1F4D3A] transition-opacity duration-300 ${phase === "hide" ? "opacity-0" : "opacity-100"}`}
     >
-      <div className="grid justify-items-center">
-        <img src="/icon-512.png" alt="" className="logo-loader h-28 w-28" />
-        <p className="mt-4 text-lg font-bold tracking-wide text-[#F6F1E7]">VirungaPay</p>
-      </div>
+      <img src="/icon-512.png" alt="" className="logo-loader h-28 w-28" />
+      <p className="absolute top-1/2 mt-20 text-lg font-bold tracking-wide text-[#F6F1E7]">VirungaPay</p>
     </div>
   );
 }
