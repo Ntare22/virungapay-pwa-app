@@ -99,7 +99,7 @@ export function LoginScreen() {
           </button>
         ) : null}
         <Link href="/signup" className="text-center text-sm font-bold text-[#1C2416]">
-          Sign up as a tourist
+          Sign Up As A Tourist
         </Link>
       </form>
     </main>

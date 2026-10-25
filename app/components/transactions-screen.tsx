@@ -153,7 +153,7 @@ function matches(row: TransactionRow, filter: Filter) {
   if (filter === "all") return true;
   if (filter === "collection") return row.kind === "collection";
   if (filter === "exchange") return row.kind === "conversion";
-  if (filter === "wallet") return row.kind === "conversion" || row.kind === "p2p";
+  if (filter === "wallet") return row.kind === "conversion" || row.kind === "p2p" || row.kind === "send";
   return row.kind !== "collection" && row.kind !== "conversion" && row.kind !== "p2p";
 }
 
@@ -166,7 +166,7 @@ function titleFor(row: TransactionRow, tourist: boolean) {
   }
   if (row.kind === "collection") return "Collection";
   if (row.kind === "conversion") return "Exchange";
-  if (row.kind === "p2p") return "Wallet movement";
+  if (row.kind === "p2p" || row.kind === "send") return "Wallet movement";
   if (row.kind === "withdraw") return "Withdrawal";
   return row.what;
 }

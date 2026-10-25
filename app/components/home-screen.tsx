@@ -51,7 +51,7 @@ export function HomeScreen() {
     );
   }
 
-  const recent = role === "operator_owner" ? moves.slice(0, 5) : moves.filter((row) => row.kind === "p2p" || row.kind === "withdraw").slice(0, 8);
+  const recent = role === "operator_owner" ? moves.slice(0, 5) : moves.filter((row) => row.kind === "p2p" || row.kind === "send" || row.kind === "withdraw").slice(0, 8);
 
   return (
     <div>

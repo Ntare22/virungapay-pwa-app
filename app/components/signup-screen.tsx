@@ -47,7 +47,7 @@ export function SignupScreen() {
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-[#F6F1E7] px-4 py-8">
       <Mark />
-      <h1 className="mt-6 text-3xl font-bold text-[#1C2416]">Sign up as a tourist</h1>
+      <h1 className="mt-6 text-3xl font-bold text-[#1C2416]">Sign Up As A Tourist</h1>
       <p className="mt-2 text-sm text-[#1C2416]">No password. We email a code when you log in.</p>
       {createdEmail ? (
         <section className="mt-8 border-2 border-[#1C2416] bg-white p-4 shadow-[6px_6px_0_#E2B15A]">

@@ -47,6 +47,32 @@ export class ApiError extends Error {
   }
 }
 
+export function actionNotice(error: unknown) {
+  if (error instanceof ApiError) {
+    switch (error.code) {
+      case "insufficient_balance":
+        return "This wallet does not have enough for that amount.";
+      case "fee_too_large":
+        return "The fee is larger than the amount.";
+      case "fee_not_set":
+        return "No fee has been set for this payment.";
+      case "wallet_not_found":
+        return "No wallet uses that username.";
+      case "not_crew":
+        return "Tips go to a guide or a driver.";
+      case "not_operator":
+        return "Payments for a service go to a tour operator.";
+      case "unsupported_currency":
+        return "This payment uses a UGX wallet.";
+      case "not_ready":
+        return "A wallet needed for this payment is not set up yet.";
+      default:
+        return error.message || "Something went wrong. Try again.";
+    }
+  }
+  return error instanceof Error && error.message ? error.message : "Something went wrong. Try again.";
+}
+
 export function readSession(): Session | null {
   if (typeof window === "undefined") return null;
   const raw = window.localStorage.getItem(storageKey);
@@ -216,6 +242,14 @@ export function topUpCard(input: { amount: string; last4: string }) {
 
 export function sendMobileMoney(input: { network: "airtel" | "mtn"; phone: string; amount: string }) {
   return request<{ status: string }>("/v1/mobile-money", { method: "POST", body: JSON.stringify(input) }, token());
+}
+
+export function sendToWallet(input: { username: string; amount: string }) {
+  return request<{ status: string }>(
+    "/v1/wallets/send",
+    { method: "POST", body: JSON.stringify({ username: input.username, amount: input.amount }) },
+    token(),
+  );
 }
 
 export function sendTip(input: { username: string; amount: string; purpose: "tip" | "service" }) {

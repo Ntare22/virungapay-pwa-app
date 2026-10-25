@@ -93,6 +93,7 @@ function label(kind: string, direction: string) {
   if (kind === "collection") return "Collection";
   if (kind === "withdraw") return "Withdrawal";
   if (kind === "p2p") return direction === "in" ? "Tip in" : "Tip out";
+  if (kind === "send") return direction === "in" ? "Received" : "Sent";
   if (kind === "conversion") return "Exchange";
   return direction === "in" ? "Money in" : "Money out";
 }

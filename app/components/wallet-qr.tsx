@@ -50,7 +50,7 @@ function QrDialog({ username, onClose }: { username: string; onClose: () => void
         className="w-full max-w-md border-2 border-[#1C2416] bg-[#F6F1E7] p-4 shadow-[6px_6px_0_#E2B15A]"
       >
         <div className="flex items-center justify-between gap-3">
-          <h2 id="wallet-qr-title" className="text-lg font-bold">Wallet code</h2>
+          <h2 id="wallet-qr-title" className="text-lg font-bold">Wallet Code</h2>
           <button type="button" onClick={onClose} className="px-2 text-xl" aria-label="Close">×</button>
         </div>
         {username ? (

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { bureaus, myCompany, myWallets, readSession, withdraw, type Bureau, type Wallet } from "../lib/api";
+import { actionNotice, bureaus, myCompany, myWallets, readSession, withdraw, type Bureau, type Wallet } from "../lib/api";
+import { Toast } from "./toast";
 
 export function WithdrawScreen({ embedded = false }: { embedded?: boolean }) {
   const [role, setRole] = useState("");
@@ -11,6 +12,7 @@ export function WithdrawScreen({ embedded = false }: { embedded?: boolean }) {
   const [bureauId, setBureauId] = useState("");
   const [amount, setAmount] = useState("");
   const [notice, setNotice] = useState("");
+  const [done, setDone] = useState("");
   const [pending, setPending] = useState(false);
 
   useEffect(() => {
@@ -41,14 +43,15 @@ export function WithdrawScreen({ embedded = false }: { embedded?: boolean }) {
     event.preventDefault();
     setPending(true);
     setNotice("");
+    setDone("");
     withdraw({ bureauId, currency, amount })
       .then(() => {
         setAmount("");
-        setNotice(embedded ? "Withdrawal recorded. The balance will update on Wallets." : "Withdrawal recorded. The balance will update on Home and Wallets.");
+        setDone(embedded ? "Withdrawal recorded. The balance will update on Wallets." : "Withdrawal recorded. The balance will update on Home and Wallets.");
         const load = role === "operator_owner" ? myCompany().then((company) => company.wallets ?? []) : myWallets().then((body) => body.wallets ?? []);
         return load.then(setWallets);
       })
-      .catch((error: unknown) => setNotice(error instanceof Error ? error.message : "Something went wrong. Try again."))
+      .catch((error: unknown) => setNotice(actionNotice(error)))
       .finally(() => setPending(false));
   }
 
@@ -80,7 +83,8 @@ export function WithdrawScreen({ embedded = false }: { embedded?: boolean }) {
             ))}
           </select>
         </label>
-        {notice ? <p className="text-sm">{notice}</p> : null}
+        {done ? <p className="text-sm">{done}</p> : null}
+        <Toast message={notice} onClose={() => setNotice("")} />
         <button type="submit" disabled={pending || !currency || !bureauId} className="h-12 border-2 border-[#1C2416] bg-[#E2B15A] text-sm font-bold uppercase disabled:opacity-60">
           {pending ? "Sending" : "Withdraw"}
         </button>

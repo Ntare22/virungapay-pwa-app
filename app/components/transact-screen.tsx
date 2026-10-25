@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { lookupWallet, readSession, type WalletLookup } from "../lib/api";
+import { useState, type FormEvent } from "react";
+import { actionNotice, lookupWallet, readSession, sendToWallet, type WalletLookup } from "../lib/api";
 import { ScanWalletButton } from "./scan-wallet";
+import { Toast } from "./toast";
 import { TouristTransact } from "./tourist-transact";
 import { WithdrawScreen } from "./withdraw-screen";
 
@@ -84,8 +85,10 @@ function OperatorTransact() {
 
 function SendToWallet({ initial }: { initial?: WalletLookup | null }) {
   const [username, setUsername] = useState(initial?.username ?? "");
+  const [amount, setAmount] = useState("");
   const [found, setFound] = useState<WalletLookup | null>(initial ?? null);
   const [notice, setNotice] = useState("");
+  const [done, setDone] = useState("");
   const [pending, setPending] = useState(false);
 
   function onCheck() {
@@ -97,15 +100,47 @@ function SendToWallet({ initial }: { initial?: WalletLookup | null }) {
     }
     setPending(true);
     setNotice("");
+    setDone("");
     setFound(null);
     lookupWallet(handle)
-      .then((wallet) => setFound(wallet))
-      .catch((error: unknown) => setNotice(error instanceof Error ? error.message : "Something went wrong. Try again."))
+      .then((wallet) => {
+        if (wallet.currency !== "UGX") {
+          setNotice("Send to a UGX wallet.");
+          return;
+        }
+        setFound(wallet);
+      })
+      .catch((error: unknown) => setNotice(actionNotice(error)))
+      .finally(() => setPending(false));
+  }
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!found) {
+      setNotice("Check the username before you send.");
+      return;
+    }
+    if (!amount.trim()) {
+      setNotice("Enter the amount to send.");
+      return;
+    }
+    setPending(true);
+    setNotice("");
+    setDone("");
+    const paid = amount.trim();
+    sendToWallet({ username: found.username, amount: paid })
+      .then(() => {
+        setDone(`UGX ${paid} is on the way to ${found.name || found.username}.`);
+        setAmount("");
+        setUsername("");
+        setFound(null);
+      })
+      .catch((error: unknown) => setNotice(actionNotice(error)))
       .finally(() => setPending(false));
   }
 
   return (
-    <div>
+    <form onSubmit={onSubmit}>
       <h1 className="text-2xl font-bold text-[#1C2416]">VirungaPay wallet</h1>
       <p className="mt-2 text-sm">Scan a wallet code, or enter the username, and check it before you send.</p>
       <label className="mt-4 block text-sm font-bold">
@@ -117,15 +152,21 @@ function SendToWallet({ initial }: { initial?: WalletLookup | null }) {
             setFound(null);
           }}
           placeholder="james-ugx"
-          className="mt-1 h-12 w-full border-2 border-[#1C2416] px-3 font-mono font-normal"
+          className="mt-1 h-12 w-full border-2 border-[#1C2416] bg-white px-3 font-mono font-normal"
         />
       </label>
       <div className="mt-3">
         <ScanWalletButton
           onFound={(wallet) => {
             setUsername(wallet.username);
-            setFound(wallet);
             setNotice("");
+            setDone("");
+            if (wallet.currency !== "UGX") {
+              setFound(null);
+              setNotice("Send to a UGX wallet.");
+              return;
+            }
+            setFound(wallet);
           }}
         />
       </div>
@@ -139,8 +180,21 @@ function SendToWallet({ initial }: { initial?: WalletLookup | null }) {
           <span className="mt-1 block">{found.currency} wallet</span>
         </p>
       ) : null}
-      {notice ? <p className="mt-3 text-sm">{notice}</p> : null}
-    </div>
+      <label className="mt-4 block text-sm font-bold">
+        Amount in UGX
+        <input
+          value={amount}
+          onChange={(event) => setAmount(event.target.value)}
+          inputMode="decimal"
+          className="mt-1 h-12 w-full border-2 border-[#1C2416] bg-white px-3 font-normal"
+        />
+      </label>
+      {done ? <p className="mt-3 border-2 border-[#1C2416] bg-white p-3 text-sm shadow-[4px_4px_0_#E2B15A]">{done}</p> : null}
+      <button type="submit" disabled={pending || !found} className="mt-4 h-12 w-full border-2 border-[#1C2416] bg-[#E2B15A] text-sm font-bold uppercase disabled:opacity-60">
+        {pending ? "Sending" : "Send"}
+      </button>
+      <Toast message={notice} onClose={() => setNotice("")} />
+    </form>
   );
 }
 

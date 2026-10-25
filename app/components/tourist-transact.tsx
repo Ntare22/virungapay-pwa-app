@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { lookupWallet, sendMobileMoney, sendTip, topUpCard, type WalletLookup } from "../lib/api";
+import { actionNotice, lookupWallet, sendMobileMoney, sendTip, topUpCard, type WalletLookup } from "../lib/api";
 import { ScanWalletButton } from "./scan-wallet";
+import { Toast } from "./toast";
 
 const actions = [
   { id: "card", title: "Add money", text: "Add UGX to your VirungaPass Wallet with a bank card." },
@@ -100,7 +101,7 @@ function AddMoney() {
         setCvc("");
         setAmount("");
       })
-      .catch((error: unknown) => setNotice(error instanceof Error ? error.message : "Something went wrong. Try again."))
+      .catch((error: unknown) => setNotice(actionNotice(error)))
       .finally(() => setPending(false));
   }
 
@@ -115,7 +116,7 @@ function AddMoney() {
         <Field label="CVC" value={cvc} onChange={setCvc} inputMode="numeric" autoComplete="cc-csc" />
       </div>
       <Field label="Amount in UGX" value={amount} onChange={setAmount} inputMode="decimal" />
-      {notice ? <p className="mt-3 text-sm">{notice}</p> : null}
+      <Toast message={notice} onClose={() => setNotice("")} />
       {done ? <p className="mt-3 border-2 border-[#1C2416] bg-white p-3 text-sm shadow-[4px_4px_0_#E2B15A]">{done}</p> : null}
       <button type="submit" disabled={pending} className="mt-4 h-12 w-full border-2 border-[#1C2416] bg-[#E2B15A] text-sm font-bold uppercase disabled:opacity-60">
         {pending ? "Adding" : "Add money"}
@@ -148,7 +149,7 @@ function MobileMoney() {
         setPhone("");
         setAmount("");
       })
-      .catch((error: unknown) => setNotice(error instanceof Error ? error.message : "Something went wrong. Try again."))
+      .catch((error: unknown) => setNotice(actionNotice(error)))
       .finally(() => setPending(false));
   }
 
@@ -177,7 +178,7 @@ function MobileMoney() {
         </span>
       </label>
       <Field label="Amount in UGX" value={amount} onChange={setAmount} inputMode="decimal" />
-      {notice ? <p className="mt-3 text-sm">{notice}</p> : null}
+      <Toast message={notice} onClose={() => setNotice("")} />
       {done ? <p className="mt-3 border-2 border-[#1C2416] bg-white p-3 text-sm shadow-[4px_4px_0_#E2B15A]">{done}</p> : null}
       <button type="submit" disabled={pending} className="mt-4 h-12 w-full border-2 border-[#1C2416] bg-[#E2B15A] text-sm font-bold uppercase disabled:opacity-60">
         {pending ? "Sending" : "Send"}
@@ -219,7 +220,7 @@ function TipCrew({ initial }: { initial?: WalletLookup | null }) {
         }
         setFound(wallet);
       })
-      .catch((error: unknown) => setNotice(error instanceof Error ? error.message : "Something went wrong. Try again."))
+      .catch((error: unknown) => setNotice(actionNotice(error)))
       .finally(() => setPending(false));
   }
 
@@ -243,7 +244,7 @@ function TipCrew({ initial }: { initial?: WalletLookup | null }) {
         setUsername("");
         setFound(null);
       })
-      .catch((error: unknown) => setNotice(error instanceof Error ? error.message : "Something went wrong. Try again."))
+      .catch((error: unknown) => setNotice(actionNotice(error)))
       .finally(() => setPending(false));
   }
 
@@ -308,7 +309,7 @@ function TipCrew({ initial }: { initial?: WalletLookup | null }) {
         </p>
       ) : null}
       <Field label="Amount in UGX" value={amount} onChange={setAmount} inputMode="decimal" />
-      {notice ? <p className="mt-3 text-sm">{notice}</p> : null}
+      <Toast message={notice} onClose={() => setNotice("")} />
       {done ? <p className="mt-3 border-2 border-[#1C2416] bg-white p-3 text-sm shadow-[4px_4px_0_#E2B15A]">{done}</p> : null}
       <button type="submit" disabled={pending || !found} className="mt-4 h-12 w-full border-2 border-[#1C2416] bg-[#E2B15A] text-sm font-bold uppercase disabled:opacity-60">
         {pending ? "Sending" : service ? "Pay" : "Send tip"}
