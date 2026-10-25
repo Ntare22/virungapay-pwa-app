@@ -7,71 +7,90 @@ type InstallPromptEvent = Event & {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 };
 
-const dismissedKey = "virungapay.install.dismissed";
+const installedKey = "virungapay.installed";
 
 export function InstallPrompt() {
   const [ready, setReady] = useState(false);
   const [installed, setInstalled] = useState(true);
   const [iphone, setIphone] = useState(false);
   const [promptEvent, setPromptEvent] = useState<InstallPromptEvent | null>(null);
-  const [dismissed, setDismissed] = useState(true);
 
   useEffect(() => {
-    const nav = navigator as Navigator & { standalone?: boolean };
-    const standalone = window.matchMedia("(display-mode: standalone)").matches || nav.standalone === true;
-    setInstalled(standalone);
+    const media = window.matchMedia("(display-mode: standalone), (display-mode: fullscreen)");
+    const nav = navigator as Navigator & {
+      standalone?: boolean;
+      getInstalledRelatedApps?: () => Promise<Array<{ platform: string }>>;
+    };
+
+    function runningInstalled() {
+      return media.matches || nav.standalone === true;
+    }
+
+    function markInstalled() {
+      localStorage.setItem(installedKey, "1");
+      setInstalled(true);
+    }
+
+    if (runningInstalled()) markInstalled();
+    else setInstalled(localStorage.getItem(installedKey) === "1");
     setIphone(/iPhone|iPad|iPod/i.test(navigator.userAgent));
-    setDismissed(sessionStorage.getItem(dismissedKey) === "1");
     setReady(true);
 
+    function onMode() {
+      if (runningInstalled()) markInstalled();
+    }
     function onPrompt(event: Event) {
       event.preventDefault();
       setPromptEvent(event as InstallPromptEvent);
     }
+    media.addEventListener("change", onMode);
     window.addEventListener("beforeinstallprompt", onPrompt);
-    return () => window.removeEventListener("beforeinstallprompt", onPrompt);
+    window.addEventListener("appinstalled", markInstalled);
+
+    nav.getInstalledRelatedApps?.()
+      .then((apps) => {
+        if (apps.some((app) => app.platform === "webapp")) markInstalled();
+      })
+      .catch(() => {});
+
+    return () => {
+      media.removeEventListener("change", onMode);
+      window.removeEventListener("beforeinstallprompt", onPrompt);
+      window.removeEventListener("appinstalled", markInstalled);
+    };
   }, []);
 
-  if (!ready || installed || dismissed) return null;
-
-  function dismiss() {
-    sessionStorage.setItem(dismissedKey, "1");
-    setDismissed(true);
-  }
+  if (!ready || installed || (!promptEvent && !iphone)) return null;
 
   async function install() {
-    if (!promptEvent) return;
-    await promptEvent.prompt();
-    const choice = await promptEvent.userChoice;
-    setPromptEvent(null);
-    if (choice.outcome === "accepted") setInstalled(true);
+    if (promptEvent) {
+      await promptEvent.prompt();
+      const choice = await promptEvent.userChoice;
+      setPromptEvent(null);
+      if (choice.outcome === "accepted") {
+        localStorage.setItem(installedKey, "1");
+        setInstalled(true);
+      }
+      return;
+    }
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "VirungaPay", url: window.location.origin });
+      } catch {
+        // The share sheet was closed.
+      }
+    }
   }
 
   return (
-    <section className="border-b-2 border-[#1C2416] bg-white px-4 py-3">
-      <div className="mx-auto flex max-w-md items-start justify-between gap-3">
-        <div>
-          <h2 className="text-sm font-bold text-[#1C2416]">Add VirungaPay to your home screen</h2>
-          {promptEvent ? (
-            <button
-              type="button"
-              onClick={install}
-              className="mt-3 h-10 border-2 border-[#1C2416] bg-[#E2B15A] px-4 text-xs font-bold uppercase tracking-wide text-[#1C2416]"
-            >
-              Install
-            </button>
-          ) : iphone ? (
-            <p className="mt-1 text-sm text-[#1C2416]">Tap Share, then Add to Home Screen. That saves the app on your phone.</p>
-          ) : (
-            <p className="mt-1 text-sm text-[#1C2416]">
-              Open the browser menu and choose Install app or Add to Home screen.
-            </p>
-          )}
-        </div>
-        <button type="button" onClick={dismiss} aria-label="Dismiss" className="text-lg leading-none text-[#1C2416]">
-          ×
-        </button>
-      </div>
-    </section>
+    <div className="border-b-2 border-[#1C2416] bg-white px-4 py-3">
+      <button
+        type="button"
+        onClick={install}
+        className="mx-auto flex h-10 w-full max-w-md items-center justify-center border-2 border-[#1C2416] bg-[#E2B15A] text-xs font-bold uppercase tracking-wide text-[#1C2416]"
+      >
+        Install
+      </button>
+    </div>
   );
 }
