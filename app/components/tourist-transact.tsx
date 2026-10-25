@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { lookupWallet, sendMobileMoney, sendTip, topUpCard, type WalletLookup } from "../lib/api";
+import { ScanWalletButton } from "./scan-wallet";
 
 const actions = [
   { id: "card", title: "Add money", text: "Add UGX to your VirungaPass Wallet with a bank card." },
@@ -13,6 +14,7 @@ type Action = (typeof actions)[number]["id"];
 
 export function TouristTransact() {
   const [action, setAction] = useState<Action | null>(null);
+  const [scanned, setScanned] = useState<WalletLookup | null>(null);
 
   if (action === "card") {
     return (
@@ -33,8 +35,8 @@ export function TouristTransact() {
   if (action === "tip") {
     return (
       <div>
-        <Back onBack={() => setAction(null)} />
-        <TipCrew />
+        <Back onBack={() => { setAction(null); setScanned(null); }} />
+        <TipCrew initial={scanned} />
       </div>
     );
   }
@@ -42,7 +44,17 @@ export function TouristTransact() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-[#1C2416]">Pay</h1>
-      <div className="mt-4 flex flex-col gap-3">
+      <p className="mt-2 text-sm">Scan a UGX wallet code, or choose how to pay.</p>
+      <div className="mt-4">
+        <ScanWalletButton
+          prominent
+          onFound={(wallet) => {
+            setScanned(wallet);
+            setAction("tip");
+          }}
+        />
+      </div>
+      <div className="mt-3 flex flex-col gap-3">
         {actions.map((item) => (
           <button
             key={item.id}
@@ -174,11 +186,11 @@ function MobileMoney() {
   );
 }
 
-function TipCrew() {
-  const [purpose, setPurpose] = useState<"tip" | "service">("tip");
-  const [username, setUsername] = useState("");
+function TipCrew({ initial }: { initial?: WalletLookup | null }) {
+  const [purpose, setPurpose] = useState<"tip" | "service">(initial?.kind === "operator" ? "service" : "tip");
+  const [username, setUsername] = useState(initial?.username ?? "");
   const [amount, setAmount] = useState("");
-  const [found, setFound] = useState<WalletLookup | null>(null);
+  const [found, setFound] = useState<WalletLookup | null>(initial ?? null);
   const [notice, setNotice] = useState("");
   const [done, setDone] = useState("");
   const [pending, setPending] = useState(false);
@@ -238,7 +250,7 @@ function TipCrew() {
   return (
     <form onSubmit={onSubmit}>
       <h1 className="text-2xl font-bold text-[#1C2416]">Tip or pay a business</h1>
-      <p className="mt-2 text-sm">Choose a tip for a guide or driver, or a payment to a tour operator. Then check their username.</p>
+      <p className="mt-2 text-sm">Scan a wallet code, or enter the username. Then check it before the money moves.</p>
       <div className="mt-4 grid grid-cols-2 gap-2">
         {([
           ["tip", "Tip"],
@@ -274,6 +286,17 @@ function TipCrew() {
           className="mt-1 h-12 w-full border-2 border-[#1C2416] bg-white px-3 font-mono font-normal"
         />
       </label>
+      <div className="mt-3">
+        <ScanWalletButton
+          onFound={(wallet) => {
+            setPurpose(wallet.kind === "operator" ? "service" : "tip");
+            setUsername(wallet.username);
+            setFound(wallet);
+            setNotice("");
+            setDone("");
+          }}
+        />
+      </div>
       <button type="button" onClick={onCheck} disabled={pending} className="mt-3 h-12 w-full border-2 border-[#1C2416] bg-white text-sm font-bold uppercase disabled:opacity-60">
         {pending ? "Checking" : "Check username"}
       </button>

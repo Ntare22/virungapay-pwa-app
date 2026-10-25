@@ -2,6 +2,7 @@
 
 import { type Payment, type Wallet } from "../lib/api";
 import { WalletIdentity } from "./wallet-edit";
+import { WalletQr } from "./wallet-qr";
 
 export function TouristWallet({
   wallets,
@@ -30,6 +31,7 @@ export function TouristWallet({
           <WalletIdentity wallet={wallet} fallback="VirungaPass Wallet" usernameOnly onSaved={onRenamed} />
           <p className="mt-2 text-sm">{wallet.currency}</p>
           <p className="mt-1 font-mono text-2xl">{wallet.balance}</p>
+          <WalletQr wallet={wallet} />
         </article>
       ))}
       <div className="mt-3 grid grid-cols-2 gap-3">

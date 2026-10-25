@@ -4,6 +4,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { MovementList } from "./movement";
 import { TouristWallet } from "./tourist-wallet";
 import { WalletIdentity } from "./wallet-edit";
+import { WalletQr } from "./wallet-qr";
 import {
   moveWallets,
   myCompany,
@@ -112,6 +113,7 @@ export function WalletsScreen() {
               />
               <p className="mt-2 text-xs font-bold uppercase">{slot.wallet.currency}</p>
               <p className="mt-1 font-mono text-2xl">{slot.wallet.balance}</p>
+              <WalletQr wallet={slot.wallet} />
             </article>
           ) : (
             <div key={`${slot.pair}-${index}`} className="flex items-center justify-center gap-2 py-1">

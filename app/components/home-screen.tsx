@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MovementList } from "./movement";
+import { WalletQr } from "./wallet-qr";
 import { myCompany, myWallets, payments, readSession, roleLabel, type Payment, type Wallet } from "../lib/api";
 
 export function HomeScreen() {
@@ -69,6 +70,7 @@ export function HomeScreen() {
               <p className="mt-1 text-xs font-bold uppercase">{wallet.currency}</p>
               {wallet.username ? <p className="mt-1 font-mono text-sm text-[#1F4D3A]">@{wallet.username}</p> : null}
               <p className="mt-1 font-mono text-2xl">{wallet.balance}</p>
+              <WalletQr wallet={wallet} />
             </article>
           ))
         )}

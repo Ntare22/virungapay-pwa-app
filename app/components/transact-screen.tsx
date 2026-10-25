@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { lookupWallet, readSession, type WalletLookup } from "../lib/api";
+import { ScanWalletButton } from "./scan-wallet";
 import { TouristTransact } from "./tourist-transact";
 import { WithdrawScreen } from "./withdraw-screen";
 
@@ -20,6 +21,7 @@ export function TransactScreen() {
 
 function OperatorTransact() {
   const [action, setAction] = useState<Action | null>(null);
+  const [scanned, setScanned] = useState<WalletLookup | null>(null);
   const chosen = actions.find((item) => item.id === action);
 
   if (action === "withdraw") {
@@ -34,8 +36,8 @@ function OperatorTransact() {
   if (action === "wallet") {
     return (
       <div>
-        <Back onBack={() => setAction(null)} />
-        <SendToWallet />
+        <Back onBack={() => { setAction(null); setScanned(null); }} />
+        <SendToWallet initial={scanned} />
       </div>
     );
   }
@@ -53,7 +55,17 @@ function OperatorTransact() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-[#1C2416]">Pay</h1>
-      <div className="mt-4 flex flex-col gap-3">
+      <p className="mt-2 text-sm">Scan a UGX wallet code, or choose how to pay.</p>
+      <div className="mt-4">
+        <ScanWalletButton
+          prominent
+          onFound={(wallet) => {
+            setScanned(wallet);
+            setAction("wallet");
+          }}
+        />
+      </div>
+      <div className="mt-3 flex flex-col gap-3">
         {actions.map((item) => (
           <button
             key={item.id}
@@ -70,9 +82,9 @@ function OperatorTransact() {
   );
 }
 
-function SendToWallet() {
-  const [username, setUsername] = useState("");
-  const [found, setFound] = useState<WalletLookup | null>(null);
+function SendToWallet({ initial }: { initial?: WalletLookup | null }) {
+  const [username, setUsername] = useState(initial?.username ?? "");
+  const [found, setFound] = useState<WalletLookup | null>(initial ?? null);
   const [notice, setNotice] = useState("");
   const [pending, setPending] = useState(false);
 
@@ -95,7 +107,7 @@ function SendToWallet() {
   return (
     <div>
       <h1 className="text-2xl font-bold text-[#1C2416]">VirungaPay wallet</h1>
-      <p className="mt-2 text-sm">Enter the wallet username and check it before you send.</p>
+      <p className="mt-2 text-sm">Scan a wallet code, or enter the username, and check it before you send.</p>
       <label className="mt-4 block text-sm font-bold">
         Username
         <input
@@ -108,6 +120,15 @@ function SendToWallet() {
           className="mt-1 h-12 w-full border-2 border-[#1C2416] px-3 font-mono font-normal"
         />
       </label>
+      <div className="mt-3">
+        <ScanWalletButton
+          onFound={(wallet) => {
+            setUsername(wallet.username);
+            setFound(wallet);
+            setNotice("");
+          }}
+        />
+      </div>
       <button type="button" onClick={onCheck} disabled={pending} className="mt-3 h-12 w-full border-2 border-[#1C2416] bg-white text-sm font-bold uppercase disabled:opacity-60">
         {pending ? "Checking" : "Check username"}
       </button>
