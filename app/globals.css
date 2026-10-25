@@ -29,3 +29,27 @@ body {
 .font-mono {
   font-family: var(--font-roboto-mono), ui-monospace, monospace;
 }
+
+@keyframes logo-breathe {
+  0%,
+  100% {
+    transform: scale(0.86);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.logo-loader {
+  transform-origin: center;
+  animation: logo-breathe 1.15s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-loader {
+    animation: none;
+    opacity: 1;
+  }
+}

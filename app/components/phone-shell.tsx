@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { clearSession, readSession, roleLabel, type Session } from "../lib/api";
+import { LogoLoader } from "./logo-loader";
 import { Mark } from "./mark";
 
 const tabs = [
@@ -42,7 +43,11 @@ export function PhoneShell({ children }: { children: ReactNode }) {
   }, [router, pathname]);
 
   if (!session) {
-    return <main className="mx-auto min-h-dvh w-full max-w-md bg-[#F6F1E7]" />;
+    return (
+      <main className="grid min-h-dvh place-items-center bg-[#F6F1E7]">
+        <LogoLoader label="Loading" className="py-0" />
+      </main>
+    );
   }
 
   const tourist = session.user.role === "tourist";
